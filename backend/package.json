@@ -1,0 +1,25 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Backend server for the app using gRPC",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jimmy290901/Profiles.git"
+  },
+  "keywords": [
+    "Angular",
+    "gRPC",
+    "Node",
+    "ProtoBuf"
+  ],
+  "author": "Shubham Jain",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jimmy290901/Profiles/issues"
+  },
+  "homepage": "https://github.com/Jimmy290901/Profiles#readme"
+}
