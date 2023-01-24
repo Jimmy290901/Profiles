@@ -18,3 +18,9 @@ Update details (enter details and send access token)					check access token
 	update details with data received										valid - update DB and send updated data
 
 If access token already stored, redirect to user profile page if user tries to navigate to /login or /signup
+
+Routes: -
+/login
+/signup
+/profile/:username
+/profile/:username/edit
