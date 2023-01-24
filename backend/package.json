@@ -21,5 +21,11 @@
   "bugs": {
     "url": "https://github.com/Jimmy290901/Profiles/issues"
   },
-  "homepage": "https://github.com/Jimmy290901/Profiles#readme"
+  "homepage": "https://github.com/Jimmy290901/Profiles#readme",
+  "dependencies": {
+    "@grpc/grpc-js": "^1.8.4",
+    "@grpc/proto-loader": "^0.7.4",
+    "dotenv": "^16.0.3",
+    "mongoose": "^6.8.4"
+  }
 }

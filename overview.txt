@@ -1,4 +1,4 @@
-signup - email, profile image, name, height, gender, DOB
+signup - username, password, profile image, name, height, gender, DOB
 login -> view profile
 
 admin login -> view all users and their info
@@ -17,3 +17,4 @@ Update details (enter details and send access token)					check access token
 	show error and redirect to login										invalid - send error
 	update details with data received										valid - update DB and send updated data
 
+If access token already stored, redirect to user profile page if user tries to navigate to /login or /signup

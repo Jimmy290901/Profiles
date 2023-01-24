@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package profiles;
+
+service ProfileService {
+    rpc Login(Credentials) returns (UserData);
+    rpc Signup(UserData) returns (UserData);
+    rpc UpdateProfile(UserData) returns (UserData);
+}
+
+message Credentials {
+    string username = 1;
+    string password = 2;
+}
+
+message UserData {
+    string username = 1;
+    string password = 2;
+    string name = 3;
+    int32 heightInCm = 4;
+    enum gender {
+        MALE = 0;
+        FEMALE = 1;
+    }
+    string dob = 5;
+    bytes profile_img = 6;
+}
