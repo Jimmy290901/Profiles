@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -10,4 +11,9 @@ import { Component } from '@angular/core';
 })
 export class LoginComponent {
   hide: boolean = true;
+
+  onSubmit(f: NgForm) {
+    console.log(f);
+  }
+
 }
