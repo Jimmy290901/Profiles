@@ -26,8 +26,15 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 mat-card-header, mat-card-content {
-    padding: 16px !important;
     width: -webkit-fill-available;
+}
+
+mat-card-header, .form-fields {
+    padding: 16px !important;
+}
+
+mat-card-title {
+    font-size: x-large !important;
 }
 
 .mat-mdc-card-header-text {
@@ -48,9 +55,10 @@ mat-card-actions {
     width: 45%;
     max-width: 400px;
     min-width: 320px;
+    margin: 32px 0;
 }
 
-@media (max-width: 360px) {
+@media (max-width: 420px) {
     .box {
         width: 100%;
         min-width: 0 !important;

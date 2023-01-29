@@ -1,1 +1,74 @@
-<p>signup works!</p>
+<mat-card class="flex-center">
+    <mat-card-header>
+        <mat-card-title>Sign Up</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <mat-stepper orientation="vertical" [linear]="true" #stepper>
+            <mat-step>
+                <ng-template matStepLabel>Fill your credentials</ng-template>
+                <div class="flex-column form-fields">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Username</mat-label>
+                        <input matInput type="text" required>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Password</mat-label>
+                        <input matInput [type]="hide ? 'password' : 'text'" required>
+                        <button mat-icon-button matSuffix (click)="hide = !hide">
+                            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </button>
+                    </mat-form-field>
+                    <div>
+                        <button mat-stroked-button color="primary" matStepperNext>Next</button>
+                    </div>
+                </div>
+            </mat-step>
+            <mat-step>
+                <ng-template matStepLabel>Fill your Personal Details</ng-template>
+                <div class="flex-column form-fields">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Name</mat-label>
+                        <input matInput type="text" required>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Height (in cm)</mat-label>
+                        <input matInput type="number" required>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Gender</mat-label>
+                        <mat-select required>
+                            <mat-option value="MALE">Male</mat-option>
+                            <mat-option value="FEMALE">Female</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Date of Birth</mat-label>
+                        <input matInput [matDatepicker]="picker" required>
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <button mat-stroked-button color="basic" matStepperPrevious>Back</button>
+                    <button mat-stroked-button color="primary" matStepperNext>Next</button>
+                </div>
+            </mat-step>
+            <mat-step>
+                <ng-template matStepLabel>Fill Profile Image</ng-template>
+                <div class="flex-column form-fields">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Profile Photo</mat-label>
+                        <ngx-mat-file-input></ngx-mat-file-input>
+                        <mat-icon matSuffix>folder</mat-icon>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <button mat-stroked-button color="primary">Sign Up</button>
+                </div>
+            </mat-step>
+        </mat-stepper>
+    </mat-card-content>
+    <mat-card-footer>
+        <p>Already have an account? <a routerLink="/login">Login</a></p>
+    </mat-card-footer>
+</mat-card>
