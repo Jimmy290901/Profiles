@@ -12,7 +12,10 @@
                             <mat-form-field appearance="outline">
                                 <mat-label>Username</mat-label>
                                 <input matInput type="text" formControlName="username">
-                                <mat-error *ngIf="!credentials.get('username')?.valid">Username cannot be empty</mat-error>
+                                <mat-error *ngIf="!credentials.get('username')?.valid">
+                                    <span *ngIf="credentials.get('username')?.hasError('hasSpace'); else empty">Username cannot contain spaces</span>
+                                    <ng-template #empty>Username cannot be empty</ng-template>
+                                </mat-error>
                             </mat-form-field>
                             <mat-form-field appearance="outline">
                                 <mat-label>Password</mat-label>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { FormControl } from '@angular/forms';
+import { NoSpaceDirective, NoSpaceValidator } from '../../shared/no-space.directive';
 
 @Component({
   selector: 'app-signup',
@@ -17,7 +18,7 @@ export class SignupComponent implements OnInit {
   profileImgGroup!: FormGroup;
   ngOnInit() {
     this.credentials = new FormGroup({
-      username: new FormControl(null, [Validators.required]),
+      username: new FormControl(null, [Validators.required, NoSpaceValidator]),
       password: new FormControl(null, [Validators.required])
     });
     this.personalDetails = new FormGroup({

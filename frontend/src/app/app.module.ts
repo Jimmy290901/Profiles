@@ -22,6 +22,9 @@ import { SignupComponent } from './signup/signup.component';
 import { ProfileComponent } from './profile/profile.component';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
 
+
+import { NoSpaceDirective } from '../shared/no-space.directive';
+
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'signup', component: SignupComponent},
@@ -35,7 +38,8 @@ const routes: Routes = [
     LoginComponent,
     SignupComponent,
     ProfileComponent,
-    EditProfileComponent
+    EditProfileComponent,
+    NoSpaceDirective
   ],
   imports: [
     BrowserModule,
