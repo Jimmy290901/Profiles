@@ -30,10 +30,11 @@ const server = new grpc.Server();
 server.addService(profiles.ProfileService.service, {
     Login: Login,
     Signup: Signup,
-    UpdateProfile: UpdateProfile
+    UpdateProfile: UpdateProfile,
+    UsernameExists: UsernameExists,
 });
 
-server.bindAsync('0.0.0.0:9000', grpc.ServerCredentials.createInsecure(), (err, port)=> {
+server.bindAsync('0.0.0.0:9090', grpc.ServerCredentials.createInsecure(), (err, port)=> {
     if (err) {
         console.log("Error:", err);
     } else {
@@ -52,4 +53,8 @@ function Signup(call, callback) {
 
 function UpdateProfile(call, callback) {
 
+}
+
+function UsernameExists(call, callback) {
+    
 }

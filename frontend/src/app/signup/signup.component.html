@@ -13,8 +13,9 @@
                                 <mat-label>Username</mat-label>
                                 <input matInput type="text" formControlName="username">
                                 <mat-error *ngIf="!credentials.get('username')?.valid">
-                                    <span *ngIf="credentials.get('username')?.hasError('hasSpace'); else empty">Username cannot contain spaces</span>
-                                    <ng-template #empty>Username cannot be empty</ng-template>
+                                    <span *ngIf="credentials.get('username')?.hasError('username_exists')">Username already exists</span>
+                                    <span *ngIf="credentials.get('username')?.hasError('hasSpace')">Username cannot contain spaces</span>
+                                    <span *ngIf="credentials.get('username')?.hasError('required')">Username cannot be empty</span>
                                 </mat-error>
                             </mat-form-field>
                             <mat-form-field appearance="outline">

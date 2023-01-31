@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { FormControl } from '@angular/forms';
-import { NoSpaceDirective, NoSpaceValidator } from '../../shared/no-space.directive';
+import { NoSpaceValidator } from '../validators/no-space.directive';
+import { CheckUsernameExists } from '../validators/check-username';
 
 @Component({
   selector: 'app-signup',
@@ -16,13 +17,14 @@ export class SignupComponent implements OnInit {
   credentials!: FormGroup;
   personalDetails!: FormGroup;
   profileImgGroup!: FormGroup;
+
   ngOnInit() {
     this.credentials = new FormGroup({
-      username: new FormControl(null, [Validators.required, NoSpaceValidator]),
-      password: new FormControl(null, [Validators.required])
+      username: new FormControl('', [Validators.required, NoSpaceValidator, CheckUsernameExists]),
+      password: new FormControl('', [Validators.required])
     });
     this.personalDetails = new FormGroup({
-      name: new FormControl(null, [Validators.required]),
+      name: new FormControl('', [Validators.required]),
       height: new FormControl(null, [Validators.required]),
       gender: new FormControl(null, [Validators.required]),
       dob: new FormControl(null, [Validators.required])
@@ -31,6 +33,7 @@ export class SignupComponent implements OnInit {
       profileImg: new FormControl(null, [Validators.required])
     });
   }
+
   onSubmit() {
     console.log(this.credentials, this.personalDetails, this.profileImgGroup);
   }

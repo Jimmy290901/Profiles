@@ -6,6 +6,15 @@ service ProfileService {
     rpc Login(Credentials) returns (UserData);
     rpc Signup(UserData) returns (UserData);
     rpc UpdateProfile(UserData) returns (UserData);
+    rpc UsernameExists(UsernameRequest) returns (ExistsResponse);
+}
+
+message UsernameRequest {
+    string username = 1;
+}
+
+message ExistsResponse {
+    bool exists = 1;
 }
 
 message Credentials {
@@ -18,7 +27,7 @@ message UserData {
     string password = 2;
     string name = 3;
     int32 heightInCm = 4;
-    enum gender {
+    enum Gender {
         MALE = 0;
         FEMALE = 1;
     }

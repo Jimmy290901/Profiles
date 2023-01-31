@@ -1,5 +1,5 @@
 import { Directive } from '@angular/core';
-import { AbstractControl, FormControl, NG_VALIDATORS, ValidationErrors, Validator } from '@angular/forms';
+import { FormControl, NG_VALIDATORS, ValidationErrors, Validator } from '@angular/forms';
 
 @Directive({
   selector: '[appNoSpace]',

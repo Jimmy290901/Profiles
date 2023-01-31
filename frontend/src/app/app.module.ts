@@ -23,7 +23,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
 
 
-import { NoSpaceDirective } from '../shared/no-space.directive';
+import { NoSpaceDirective } from './validators/no-space.directive';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
