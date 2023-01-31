@@ -29,7 +29,7 @@
                         </div>
                     </form>
                     <div class="stepper-btn">
-                        <button mat-stroked-button color="primary" matStepperNext type="button">Next</button>
+                        <button mat-stroked-button color="primary" matStepperNext type="button" (click)="handleOnClick()">Next</button>
                     </div>
                 </mat-step>
                 <mat-step [stepControl]="personalDetails">

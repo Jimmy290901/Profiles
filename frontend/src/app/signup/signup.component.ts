@@ -3,6 +3,7 @@ import { FormGroup, Validators } from '@angular/forms';
 import { FormControl } from '@angular/forms';
 import { NoSpaceValidator } from '../validators/no-space.directive';
 import { CheckUsernameExists } from '../validators/check-username';
+import { DataService } from '../services/data.service';
 
 @Component({
   selector: 'app-signup',
@@ -18,6 +19,8 @@ export class SignupComponent implements OnInit {
   personalDetails!: FormGroup;
   profileImgGroup!: FormGroup;
 
+  constructor(private dataService: DataService) {}
+
   ngOnInit() {
     this.credentials = new FormGroup({
       username: new FormControl('', [Validators.required, NoSpaceValidator, CheckUsernameExists]),
@@ -32,6 +35,10 @@ export class SignupComponent implements OnInit {
     this.profileImgGroup = new FormGroup({
       profileImg: new FormControl(null, [Validators.required])
     });
+  }
+
+  handleOnClick() {
+    this.dataService.checkUsername(this.credentials.value.username);
   }
 
   onSubmit() {

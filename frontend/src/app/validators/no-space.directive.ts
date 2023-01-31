@@ -1,5 +1,5 @@
 import { Directive } from '@angular/core';
-import { FormControl, NG_VALIDATORS, ValidationErrors, Validator } from '@angular/forms';
+import { AbstractControl, FormControl, NG_VALIDATORS, ValidationErrors, Validator } from '@angular/forms';
 
 @Directive({
   selector: '[appNoSpace]',
@@ -17,7 +17,7 @@ export class NoSpaceDirective implements Validator {
 
 }
 
-export function NoSpaceValidator(field: FormControl) : ValidationErrors | null {
+export function NoSpaceValidator(field: AbstractControl) : ValidationErrors | null {
   const fieldValue = field.value;
   if (fieldValue === null) {
     return null;

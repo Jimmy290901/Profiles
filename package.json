@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "@angular/cli": "^15.1.2"
+    "@angular/cli": "^15.1.2",
+    "google-protobuf": "^3.21.2"
   }
 }
