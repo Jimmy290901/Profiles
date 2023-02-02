@@ -21,7 +21,7 @@
                             <mat-form-field appearance="outline">
                                 <mat-label>Password</mat-label>
                                 <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
-                                <button mat-icon-button matSuffix (click)="hide = !hide">
+                                <button mat-icon-button matSuffix (click)="hide = !hide" type="button">
                                     <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                                 </button>
                                 <mat-error *ngIf="!credentials.get('password')?.valid">Password cannot be empty</mat-error>
@@ -44,7 +44,10 @@
                             <mat-form-field appearance="outline">
                                 <mat-label>Height (in cm)</mat-label>
                                 <input matInput type="number" formControlName="height">
-                                <mat-error *ngIf="!personalDetails.get('height')?.valid">Height cannot be empty</mat-error>
+                                <mat-error *ngIf="!personalDetails.get('height')?.valid">
+                                    <span *ngIf="personalDetails.get('height')?.hasError('min')">Height cannot be negative</span>
+                                    <span *ngIf="personalDetails.get('height')?.hasError('required')">Height cannot be empty</span>
+                                </mat-error>
                             </mat-form-field>
                             <mat-form-field appearance="outline">
                                 <mat-label>Gender</mat-label>

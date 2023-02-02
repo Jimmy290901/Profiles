@@ -18,6 +18,8 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatGridListModule } from '@angular/material/grid-list';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+
 
 
 import { AppComponent } from './app.component';
@@ -28,12 +30,15 @@ import { EditProfileComponent } from './edit-profile/edit-profile.component';
 
 
 import { NoSpaceDirective } from './validators/no-space.directive';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'signup', component: SignupComponent},
   {path: 'profile/:username', component: ProfileComponent},
-  {path: 'profile/:username/edit', component: EditProfileComponent}
+  {path: 'profile/:username/edit', component: EditProfileComponent},
+  {path: 'not-found', component: PageNotFoundComponent},
+  {path: '**', redirectTo: '/not-found'}
 ]
 
 @NgModule({
@@ -43,7 +48,8 @@ const routes: Routes = [
     SignupComponent,
     ProfileComponent,
     EditProfileComponent,
-    NoSpaceDirective
+    NoSpaceDirective,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
@@ -63,7 +69,8 @@ const routes: Routes = [
     MaterialFileInputModule,
     MatStepperModule,
     MatGridListModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatSnackBarModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -27,12 +27,12 @@ export class SignupComponent implements OnInit {
 
   ngOnInit() {
     this.credentials = new FormGroup({
-      username: new FormControl('', [Validators.required, NoSpaceValidator, this.usernameValidator.validate]),    //error due to usernameValidator
+      username: new FormControl('', [Validators.required, NoSpaceValidator]),    //error due to usernameValidator
       password: new FormControl('', [Validators.required])
     });
     this.personalDetails = new FormGroup({
       name: new FormControl('', [Validators.required]),
-      height: new FormControl(null, [Validators.required]),
+      height: new FormControl(null, [Validators.required, Validators.min(0)]),
       gender: new FormControl(null, [Validators.required]),
       dob: new FormControl(null, [Validators.required])
     });
@@ -66,6 +66,6 @@ export class SignupComponent implements OnInit {
     // console.log(URL.createObjectURL(this.img.nativeElement.files[0]));
     // console.log(URL.createObjectURL(this.profileImgGroup.value.profileImg));
 
-    // this.router.navigate(['profile/',this.credentials.value.username]);
+    this.router.navigate(['profile/',this.credentials.value.username]);
   }
 }
