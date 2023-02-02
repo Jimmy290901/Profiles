@@ -72,14 +72,12 @@
                     <ng-template matStepLabel>Upload a Profile Image</ng-template>
                     <form [formGroup]="profileImgGroup">
                         <div class="flex-column form-fields">
-                            <!-- <mat-form-field appearance="outline">
+                            <mat-form-field appearance="outline">
                                 <mat-label>Profile Photo</mat-label>
-                                <ngx-mat-file-input formControlName="profileImg"></ngx-mat-file-input>
+                                <ngx-mat-file-input formControlName="profileImg" (change)="onImgChange()" accept="image/*"></ngx-mat-file-input>
                                 <mat-icon matSuffix>folder</mat-icon>
                                 <mat-error *ngIf="!profileImgGroup.get('profileImg')?.valid">Profile Image cannot be empty</mat-error>
-                            </mat-form-field> -->
-                            <label>Profile Photo</label>
-                            <input type="file" formControlName="profileImg">
+                            </mat-form-field>
                         </div>
                     </form>
                     <div class="stepper-btn">

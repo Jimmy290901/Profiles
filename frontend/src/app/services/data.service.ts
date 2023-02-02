@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { Profile } from '../model/profile';
@@ -11,14 +12,14 @@ import { UsernameRequest } from '../proto/profiles_pb';
 export class DataService {
 
   private usersProfile!: [Profile];
-  // private profileImgFolderPath: string = __dirname + '/../../assets/images/';
+  private baseApiUrl = "https://file.io";
 
   // private profileService: ProfileServiceClient;
-  constructor() { 
+  constructor(private http: HttpClient) {
     // this.profileService = new ProfileServiceClient('http://localhost:8080', null, null);
   }
 
-  checkUsername(username: string) {
+  checkUsername(username: string): boolean {
     // const request = new UsernameRequest();
     // request.setUsername(username);
     // this.profileService.usernameExists(request, {}, (err, response) => {
@@ -28,10 +29,29 @@ export class DataService {
     //     console.log(response);
     //   }
     // });
+    if (this.usersProfile === undefined) {
+      return false;
+    }
+    for (let i = 0; i < this.usersProfile.length; i++) {
+      if (this.usersProfile[i].username === username) {
+        return true;
+      }
+    }
+    return false;
   }
 
   registerUser(newProfile: Profile) {
-    this.usersProfile.push(newProfile);
+    if (this.usersProfile === undefined) {
+      this.usersProfile = [newProfile];
+    } else {
+      this.usersProfile.push(newProfile);
+    }
+  }
+
+  uploadFile(img: File) {
+    const formData = new FormData();
+    formData.append('file', img, img.name);
+    return this.http.post(this.baseApiUrl, formData);
   }
 
   storeImage(imgPath: string) {

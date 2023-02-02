@@ -1,9 +1,16 @@
-import { FormControl, ValidationErrors } from "@angular/forms";
+import { Injectable } from "@angular/core";
+import { FormControl, ValidationErrors, Validator } from "@angular/forms";
+import { DataService } from "../services/data.service";
 
-export function CheckUsernameExists(username: FormControl): ValidationErrors | null {
-    const usernameList = ['abc','123'];
-    if (usernameList.includes(username.value)) {
-        return {'username_exists': true};
+@Injectable({
+    providedIn: 'root'
+})
+export class CheckUsernameExists implements Validator {
+    constructor(private dataService: DataService) {}
+    validate(username: FormControl): ValidationErrors | null {
+        if (this.dataService.checkUsername(username.value)) {
+            return {'username_exists': true};
+        }
+        return null;
     }
-    return null;
-  }
+}

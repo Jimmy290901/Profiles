@@ -16,11 +16,11 @@ export class EditProfileComponent implements OnInit {
   hide: boolean = true;
   profileUpdateForm!: FormGroup;
 
-  constructor(private router: Router, private route: ActivatedRoute) {}
+  constructor(private router: Router, private route: ActivatedRoute, private usernameValidator: CheckUsernameExists) {}
 
   ngOnInit() {
     this.profileUpdateForm = new FormGroup({
-      username: new FormControl('', [Validators.required, NoSpaceValidator, CheckUsernameExists]),
+      username: new FormControl('', [Validators.required, NoSpaceValidator]),
       password: new FormControl('', [Validators.required]),
       name: new FormControl('', [Validators.required]),
       height: new FormControl(null, [Validators.required]),
