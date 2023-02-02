@@ -4,6 +4,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -15,6 +16,9 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatGridListModule } from '@angular/material/grid-list';
+import {MatExpansionModule} from '@angular/material/expansion';
+
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -47,6 +51,7 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forRoot(routes),
+    HttpClientModule,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
@@ -57,6 +62,8 @@ const routes: Routes = [
     MatNativeDateModule,
     MaterialFileInputModule,
     MatStepperModule,
+    MatGridListModule,
+    MatExpansionModule
   ],
   providers: [],
   bootstrap: [AppComponent]

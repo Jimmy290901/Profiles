@@ -1,1 +1,74 @@
-<p>edit-profile works!</p>
+<mat-card class="flex-center">
+    <mat-card-header>
+        <mat-card-title>Edit Profile</mat-card-title>
+    </mat-card-header>
+    <form (ngSubmit)="onSubmit()" [formGroup]="profileUpdateForm">
+        <mat-card-content class="flex-column form-fields">
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>Credentials</mat-panel-title>
+                </mat-expansion-panel-header>
+                <mat-form-field appearance="outline">
+                    <mat-label>Username</mat-label>
+                    <input matInput type="text" formControlName="username">
+                    <mat-error *ngIf="!profileUpdateForm.get('username')?.valid">
+                        <span *ngIf="profileUpdateForm.get('username')?.hasError('username_exists')">Username already exists</span>
+                        <span *ngIf="profileUpdateForm.get('username')?.hasError('hasSpace')">Username cannot contain spaces</span>
+                        <span *ngIf="profileUpdateForm.get('username')?.hasError('required')">Username cannot be empty</span>
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Password</mat-label>
+                    <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
+                    <button mat-icon-button matSuffix (click)="hide = !hide">
+                        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                    <mat-error *ngIf="!profileUpdateForm.get('password')?.valid">Password cannot be empty</mat-error>
+                </mat-form-field>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>Personal Details</mat-panel-title>
+                </mat-expansion-panel-header>
+                <mat-form-field appearance="outline">
+                    <mat-label>Name</mat-label>
+                    <input matInput type="text" formControlName="name">
+                    <mat-error *ngIf="!profileUpdateForm.get('name')?.valid">Name cannot be empty</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Height (in cm)</mat-label>
+                    <input matInput type="number" formControlName="height">
+                    <mat-error *ngIf="!profileUpdateForm.get('height')?.valid">Height cannot be empty</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Gender</mat-label>
+                    <mat-select formControlName="gender">
+                        <mat-option value="MALE">Male</mat-option>
+                        <mat-option value="FEMALE">Female</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="!profileUpdateForm.get('gender')?.valid">Gender cannot be empty</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Date of Birth</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="dob">
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                    <mat-error *ngIf="!profileUpdateForm.get('dob')?.valid">D.O.B cannot be empty</mat-error>
+                </mat-form-field>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>Profile Image</mat-panel-title>
+                </mat-expansion-panel-header>
+                
+            </mat-expansion-panel>
+
+        </mat-card-content>
+        <mat-card-actions class="flex-column">
+            <button mat-flat-button color="primary" class="wide-button mg-bottom" type="submit">Update</button>
+            <button mat-stroked-button color="warn" class="wide-button" (click)="handleClickDiscard()">Discard</button>
+        </mat-card-actions>
+    </form>
+</mat-card>

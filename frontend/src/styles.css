@@ -9,7 +9,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .flex-column {
     display: flex !important;
-    flex-direction: column;
+    flex-direction: column !important;
 }
 
 .flex-center {
@@ -25,11 +25,15 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     width: 100%;
 }
 
+mat-expansion-panel {
+    margin-bottom: 10px !important;
+}
+
 mat-card-header, mat-card-content {
     width: -webkit-fill-available;
 }
 
-mat-card-header, .form-fields {
+mat-card-title, mat-card-header, .form-fields {
     padding: 16px !important;
 }
 
@@ -39,6 +43,7 @@ mat-card-title {
 
 mat-form-field {
     margin-bottom: 10px !important;
+    width: 100% !important;
 }
 
 .mat-mdc-card-header-text {
@@ -61,6 +66,14 @@ mat-card-actions {
 
 .wide-button {
     width: 100%;
+}
+
+.mg-bottom {
+    margin-bottom: 10px;
+}
+
+.padding-top-0 {
+    padding-top: 0 !important;
 }
 
 .box {
