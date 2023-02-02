@@ -4,6 +4,7 @@ import { FormControl } from '@angular/forms';
 import { NoSpaceValidator } from '../validators/no-space.directive';
 import { CheckUsernameExists } from '../validators/check-username';
 import { DataService } from '../services/data.service';
+import { Profile } from '../model/profile';
 
 @Component({
   selector: 'app-signup',
@@ -42,6 +43,15 @@ export class SignupComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.credentials, this.personalDetails, this.profileImgGroup);
+    
+    // const newProfile: Profile = {
+    //   username: this.credentials.value.username,
+    //   password: this.credentials.value.password,
+    //   name: this.personalDetails.value.name,
+    //   heightInCm: this.personalDetails.value.height,
+    //   gender: this.personalDetails.value.gender,
+    //   dob: this.personalDetails.value.dob,
+    // }
+    // this.dataService.registerUser(newProfile);
   }
 }

@@ -1,1 +1,22 @@
-<p>profile works!</p>
+<mat-card class="flex-center">
+    <mat-card-header class="flex-column flex-center padding-top-0">
+        <img mat-card-md-img src="/assets/images/sample.png" class="circular-img">
+        <h1><strong>Shubham Jain</strong></h1>
+    </mat-card-header>
+    <mat-card-content>
+        <mat-grid-list cols="2" rowHeight="40px" gutterSize="2px">
+            <mat-grid-tile><strong>Username</strong></mat-grid-tile>
+            <mat-grid-tile>jimmy290901</mat-grid-tile>
+            <mat-grid-tile><strong>Height</strong></mat-grid-tile>
+            <mat-grid-tile>169 cm</mat-grid-tile>
+            <mat-grid-tile><strong>Date of Birth</strong></mat-grid-tile>
+            <mat-grid-tile>29 September, 2001</mat-grid-tile>
+            <mat-grid-tile><strong>Gender</strong></mat-grid-tile>
+            <mat-grid-tile>Male</mat-grid-tile>
+
+        </mat-grid-list>
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-flat-button color="primary" class="wide-button" (click)="handleClickUpdateProfile()">Update Profile</button>
+    </mat-card-actions>
+</mat-card>
