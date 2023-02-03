@@ -1,18 +1,29 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ValidationErrors } from '@angular/forms';
+import { Observable } from 'rxjs';
 
-import { Profile } from '../model/profile';
+import { Gender, Profile } from '../model/profile';
 
-import { ProfileServiceClient } from '../proto/ProfilesServiceClientPb';
-import { UsernameRequest } from '../proto/profiles_pb';
+// import { ProfileServiceClient } from '../proto/ProfilesServiceClientPb';
+// import { UsernameRequest } from '../proto/profiles_pb';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
 
-  private usersProfile!: [Profile];
-  private baseApiUrl = "https://file.io";
+  private usersProfile: [Profile] = [{
+    username: 'admin',
+    password: 'admin',
+    name: 'Administrator',
+    heightInCm: 100,
+    gender: Gender.FEMALE,
+    dob: new Date(),
+    // profile_img_url: 'assets/images/sample.png'
+  }];
+  private api_url = 'http://localhost:3000';
+  // private baseApiUrl = "https://file.io";
 
   // private profileService: ProfileServiceClient;
   constructor(private http: HttpClient) {
@@ -20,7 +31,7 @@ export class DataService {
   }
 
   /*rework this - shows error in signup and update profile*/
-  checkUsername(username: string): boolean {
+  checkUsername(username: string, exception: string): Observable<ValidationErrors | null> {
     // const request = new UsernameRequest();
     // request.setUsername(username);
     // this.profileService.usernameExists(request, {}, (err, response) => {
@@ -30,15 +41,23 @@ export class DataService {
     //     console.log(response);
     //   }
     // });
-    if (this.noProfiles()) {
-      return false;
-    }
-    for (let i = 0; i < this.usersProfile.length; i++) {
-      if (this.usersProfile[i].username === username) {
-        return true;
+    // if (this.noProfiles()) {
+    //   return false;
+    // }
+    // for (let i = 0; i < this.usersProfile.length; i++) {
+    //   if (this.usersProfile[i].username !== exception && this.usersProfile[i].username === username) {
+    //     return true;
+    //   }
+    // }
+    // return false;
+    return this.http.get(this.api_url+'/check-username', {
+      observe: 'body',
+      responseType: 'json',
+      params: {
+        'username': username,
+        'exception': exception
       }
-    }
-    return false;
+    });
   }
 
   verifyCredentials(username: string, password: string): boolean {
@@ -49,18 +68,24 @@ export class DataService {
     return true;
   }
 
-  registerUser(newProfile: Profile) {
-    if (this.noProfiles()) {
-      this.usersProfile = [newProfile];
-    } else {
-      this.usersProfile.push(newProfile);
-    }
-  }
-
-  uploadFile(img: File) {
+  registerUser(newProfile: Profile, img: File) {
     const formData = new FormData();
-    formData.append('file', img, img.name);
-    return this.http.post(this.baseApiUrl, formData);
+    formData.append('profile_img', img, img.name);
+    formData.append('username', newProfile.username);
+    formData.append('password', newProfile.password);
+    formData.append('name', newProfile.name);
+    formData.append('dob', newProfile.dob.toDateString());
+    formData.append('gender', newProfile.gender);
+    formData.append('heightInCm', newProfile.heightInCm.toString());
+
+    return this.http.post(this.api_url+'/signup', formData);
+    
+    
+    // if (this.noProfiles()) {
+    //   this.usersProfile = [newProfile];
+    // } else {
+    //   this.usersProfile.push(newProfile);
+    // }
   }
 
   noProfiles() {

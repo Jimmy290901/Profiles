@@ -2,7 +2,7 @@
     <mat-card-header>
         <mat-card-title>Sign Up</mat-card-title>
     </mat-card-header>
-    <form (ngSubmit)="onSubmit()">
+    <form (ngSubmit)="onSubmit()" enctype="multipart/form-data">
         <mat-card-content>
             <mat-stepper orientation="vertical" linear #stepper>
                 <mat-step [stepControl]="credentials">
@@ -29,7 +29,7 @@
                         </div>
                     </form>
                     <div class="stepper-btn">
-                        <button mat-stroked-button color="primary" matStepperNext type="button" (click)="handleOnClick()">Next</button>
+                        <button mat-stroked-button color="primary" matStepperNext type="button">Next</button>
                     </div>
                 </mat-step>
                 <mat-step [stepControl]="personalDetails">
@@ -77,10 +77,11 @@
                         <div class="flex-column form-fields">
                             <mat-form-field appearance="outline">
                                 <mat-label>Profile Photo</mat-label>
-                                <ngx-mat-file-input formControlName="profileImg" (change)="onImgChange()" accept="image/*"></ngx-mat-file-input>
+                                <ngx-mat-file-input formControlName="profileImg" (change)="onImgChange()" accept="image/*" name="profile_img"></ngx-mat-file-input>
                                 <mat-icon matSuffix>folder</mat-icon>
                                 <mat-error *ngIf="!profileImgGroup.get('profileImg')?.valid">Profile Image cannot be empty</mat-error>
                             </mat-form-field>
+                            <!-- <input type="file" accept="image/*" formControlName="profileImg" (change)="onImgChange($event)" name="profile_img"> -->
                         </div>
                     </form>
                     <div class="stepper-btn">

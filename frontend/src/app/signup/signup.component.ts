@@ -3,10 +3,11 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, Validators } from '@angular/forms';
 import { FormControl } from '@angular/forms';
 import { NoSpaceValidator } from '../validators/no-space.directive';
-import { CheckUsernameExists } from '../validators/check-username';
+import { UsernameExistsService } from '../validators/username-exists.service';
 import { DataService } from '../services/data.service';
 import { Profile } from '../model/profile';
 import { firstValueFrom } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-signup',
@@ -23,34 +24,42 @@ export class SignupComponent implements OnInit {
   profileImgGroup!: FormGroup;
   profileImgFile!: File;
 
-  constructor(private dataService: DataService, private router: Router, private route: ActivatedRoute, private usernameValidator: CheckUsernameExists) {}
+  constructor(private dataService: DataService, private router: Router, private route: ActivatedRoute, private usernameValidatorService: UsernameExistsService, private snackbar: MatSnackBar) {}
 
   ngOnInit() {
     this.credentials = new FormGroup({
-      username: new FormControl('', [Validators.required, NoSpaceValidator]),    //error due to usernameValidator
+      username: new FormControl('', [Validators.required, NoSpaceValidator], [this.usernameValidatorService.validate('')]),    //error due to usernameValidator
       password: new FormControl('', [Validators.required])
     });
     this.personalDetails = new FormGroup({
       name: new FormControl('', [Validators.required]),
-      height: new FormControl(null, [Validators.required, Validators.min(0)]),
-      gender: new FormControl(null, [Validators.required]),
-      dob: new FormControl(null, [Validators.required])
+      height: new FormControl(undefined, [Validators.required, Validators.min(0)]),
+      gender: new FormControl('', [Validators.required]),
+      dob: new FormControl(undefined, [Validators.required])
     });
     this.profileImgGroup = new FormGroup({
-      profileImg: new FormControl(null, [Validators.required])
+      profileImg: new FormControl(undefined, [Validators.required])
     });
-  }
-
-  handleOnClick() {
-    this.dataService.checkUsername(this.credentials.value.username);
   }
 
   onImgChange() {
-      this.profileImgFile = this.profileImgGroup.value.profileImg._files[0];
+    // this.profileImgFile = event.target.files[0];
+    console.log(this.profileImgGroup.value.profileImg);
+    this.profileImgFile = this.profileImgGroup.value.profileImg._files[0];
+    console.log(this.profileImgFile);
+    // console.log('file content', await this.profileImgFile.text());
+    
   }
 
   async onSubmit() {
-    const event: any = await firstValueFrom(this.dataService.uploadFile(this.profileImgFile));
+    if ((!this.credentials.valid) || (!this.personalDetails.valid) || (!this.profileImgGroup.valid)) {
+      if (!this.profileImgGroup.valid) {
+        this.snackbar.open('Profile Image Field is required!', 'Close');
+      } else {
+        this.snackbar.open('Form incomplete. Try Again!', 'Close');
+      } 
+      return;
+    }
     const newProfile: Profile = {
       username: this.credentials.value.username,
       password: this.credentials.value.password,
@@ -58,14 +67,15 @@ export class SignupComponent implements OnInit {
       heightInCm: this.personalDetails.value.height,
       gender: this.personalDetails.value.gender,
       dob: this.personalDetails.value.dob,
-      profile_img_url: event.link
     }
-    this.dataService.registerUser(newProfile);
+    this.dataService.registerUser(newProfile, this.profileImgFile).subscribe((data:any) => {
+      console.log(data);
+      // this.router.navigate(['profile/',this.credentials.value.username]);
+    })
 
     // console.log(this.img.nativeElement);
     // console.log(URL.createObjectURL(this.img.nativeElement.files[0]));
     // console.log(URL.createObjectURL(this.profileImgGroup.value.profileImg));
 
-    this.router.navigate(['profile/',this.credentials.value.username]);
   }
 }

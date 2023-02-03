@@ -5,7 +5,6 @@ export interface Profile {
     heightInCm: number;
     gender: Gender;
     dob: Date;
-    profile_img_url: string;
 }
 
 export enum Gender {

@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require('mongoose');
 
 const profileSchema = new mongoose.Schema({
     username: {
@@ -27,7 +27,12 @@ const profileSchema = new mongoose.Schema({
         type: Date,
         required: [true, "D.O.B is requied"]
     },
-    //profile_img is stored on local device
+    profile_img: {
+        data: Buffer,
+        contentType: String
+    }
 });
 
-export const ProfileModel = new mongoose.model('Profile', profileSchema);
+const ProfileModel = new mongoose.model('Profile', profileSchema);
+
+module.exports = ProfileModel;
