@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { NoSpaceValidator } from '../validators/no-space.directive';
-import { CheckUsernameExists } from '../validators/check-username';
+import { UsernameExistsService } from '../validators/username-exists.service';
 import { Profile } from '../model/profile';
 import { DataService } from '../services/data.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-edit-profile',
@@ -20,7 +21,7 @@ export class EditProfileComponent implements OnInit {
   profileData!: Profile; 
   username!: string;
 
-  constructor(private dataService: DataService,private router: Router, private route: ActivatedRoute) {}
+  constructor(private dataService: DataService,private router: Router, private route: ActivatedRoute, private usernameValidatorService: UsernameExistsService, private snackbar: MatSnackBar) {}
 
   ngOnInit(): void {
       this.route.paramMap.subscribe((params: ParamMap) => {
@@ -32,13 +33,13 @@ export class EditProfileComponent implements OnInit {
             this.profileData = data;
             this.username = data.username;
             this.profileUpdateForm = new FormGroup({
-              username: new FormControl(this.profileData.username, [Validators.required, NoSpaceValidator]),
+              username: new FormControl(this.profileData.username, [Validators.required, NoSpaceValidator, this.usernameValidatorService.validate(this.username)]),
               password: new FormControl(this.profileData.password, [Validators.required]),
               name: new FormControl(this.profileData.name, [Validators.required]),
               heightInCm: new FormControl(+this.profileData.heightInCm, [Validators.required, Validators.min(0)]),
               gender: new FormControl(this.profileData.gender, [Validators.required]),
               dob: new FormControl(this.profileData.dob, [Validators.required]),
-              profile_img_url: new FormControl(null, [Validators.required])
+              // profile_img_url: new FormControl(null, [Validators.required])
             });
           }
         }
@@ -46,6 +47,10 @@ export class EditProfileComponent implements OnInit {
   }
 
   onSubmit() {
+    if (!this.profileUpdateForm.valid) {
+      this.snackbar.open('Form incomplete. Try Again!', 'Close');
+      return;
+    }
     this.dataService.updateData(this.profileUpdateForm.value, this.username);
     this.router.navigate(['profile/',this.profileUpdateForm.value.username]);
   }
