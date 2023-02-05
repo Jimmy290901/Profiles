@@ -3,6 +3,8 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Profile } from '../model/profile';
 import { DataService } from '../services/data.service';
 
+var Buffer = require('buffer/').Buffer;
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -14,18 +16,27 @@ import { DataService } from '../services/data.service';
 export class ProfileComponent implements OnInit {
 
   profileData!: Profile; 
+  isLoading!: boolean;
+  imgSrc!: string;
 
   constructor(private dataService: DataService,private router: Router, private route: ActivatedRoute) {}
 
-  ngOnInit(): void {
+    ngOnInit(): void {
+      this.isLoading = true;
       this.route.paramMap.subscribe((params: ParamMap) => {
         if (params.has('username')) {
-          let data = this.dataService.getProfile(params.get('username')!);
-          if (data === undefined) {
-            this.router.navigateByUrl('/not-found');
-          } else {
-            this.profileData = data;
-          }
+          this.dataService.getProfile(params.get('username')!).subscribe((data: Profile) => {
+            // console.log(typeof data.profile_img);
+            console.log(data);
+            if (data === null) {
+              this.isLoading = false;
+              this.router.navigateByUrl('/not-found');
+            } else {
+              this.profileData = data;
+            }
+            this.imgSrc = "data:" + this.profileData.profile_img.contentType + ";base64,"+ Buffer.from(this.profileData.profile_img.data.data).toString('base64');
+            this.isLoading = false;
+          });
         }
       });
   }

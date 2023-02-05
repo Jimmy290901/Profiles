@@ -19,7 +19,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatGridListModule } from '@angular/material/grid-list';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
-
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 
 import { AppComponent } from './app.component';
@@ -31,6 +31,7 @@ import { EditProfileComponent } from './edit-profile/edit-profile.component';
 
 import { NoSpaceDirective } from './validators/no-space.directive';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { SpinnerComponent } from './spinner/spinner.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -49,7 +50,8 @@ const routes: Routes = [
     ProfileComponent,
     EditProfileComponent,
     NoSpaceDirective,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    SpinnerComponent
   ],
   imports: [
     BrowserModule,
@@ -71,6 +73,7 @@ const routes: Routes = [
     MatGridListModule,
     MatExpansionModule,
     MatSnackBarModule,
+    MatProgressSpinnerModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

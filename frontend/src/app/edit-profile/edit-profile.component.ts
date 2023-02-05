@@ -24,24 +24,26 @@ export class EditProfileComponent implements OnInit {
   constructor(private dataService: DataService,private router: Router, private route: ActivatedRoute, private usernameValidatorService: UsernameExistsService, private snackbar: MatSnackBar) {}
 
   ngOnInit(): void {
-      this.route.paramMap.subscribe((params: ParamMap) => {
+      this.route.paramMap.subscribe(async (params: ParamMap) => {
         if (params.has('username')) {
-          let data = this.dataService.getProfile(params.get('username')!);
-          if (data === undefined) {
-            this.router.navigateByUrl('/not-found');
-          } else {
-            this.profileData = data;
-            this.username = data.username;
-            this.profileUpdateForm = new FormGroup({
-              username: new FormControl(this.profileData.username, [Validators.required, NoSpaceValidator, this.usernameValidatorService.validate(this.username)]),
-              password: new FormControl(this.profileData.password, [Validators.required]),
-              name: new FormControl(this.profileData.name, [Validators.required]),
-              heightInCm: new FormControl(+this.profileData.heightInCm, [Validators.required, Validators.min(0)]),
-              gender: new FormControl(this.profileData.gender, [Validators.required]),
-              dob: new FormControl(this.profileData.dob, [Validators.required]),
-              // profile_img_url: new FormControl(null, [Validators.required])
-            });
-          }
+          this.dataService.getProfile(params.get('username')!).subscribe((data: Profile) => {
+            console.log(data);
+            if (data === null) {
+              this.router.navigateByUrl('/not-found');
+            } else {
+              this.profileData = data;
+              this.username = data.username;
+              this.profileUpdateForm = new FormGroup({
+                username: new FormControl(this.profileData.username, [Validators.required, NoSpaceValidator, this.usernameValidatorService.validate(this.username)]),
+                password: new FormControl(this.profileData.password, [Validators.required]),
+                name: new FormControl(this.profileData.name, [Validators.required]),
+                heightInCm: new FormControl(+this.profileData.heightInCm, [Validators.required, Validators.min(0)]),
+                gender: new FormControl(this.profileData.gender, [Validators.required]),
+                dob: new FormControl(this.profileData.dob, [Validators.required]),
+                // profile_img_url: new FormControl(null, [Validators.required])
+              });
+            }
+          });
         }
       });
   }

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ValidationErrors } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 import { Gender, Profile } from '../model/profile';
 
@@ -20,8 +20,9 @@ export class DataService {
     heightInCm: 100,
     gender: Gender.FEMALE,
     dob: new Date(),
-    // profile_img_url: 'assets/images/sample.png'
+    // profile_img: 'assets/images/sample.png'
   }];
+
   private api_url = 'http://localhost:3000';
   // private baseApiUrl = "https://file.io";
 
@@ -61,10 +62,10 @@ export class DataService {
   }
 
   verifyCredentials(username: string, password: string): boolean {
-    const userProfile = this.getProfile(username);
-    if (userProfile === undefined || userProfile.password !== password) {
-      return false;
-    }
+    // const userProfile = this.getProfile(username);
+    // if (userProfile === undefined || userProfile.password !== password) {
+    //   return false;
+    // }
     return true;
   }
 
@@ -93,11 +94,9 @@ export class DataService {
   }
 
   getProfile(username: string) {
-    if (this.noProfiles()) {
-      return undefined;
-    }
-    return this.usersProfile.find((profile) => {
-      return profile.username === username;
+    return this.http.get<Profile>(this.api_url+'/profile/'+username, {
+      observe: 'body',
+      responseType: 'json',
     });
   }
 
