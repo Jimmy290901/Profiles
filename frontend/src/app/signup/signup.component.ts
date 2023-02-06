@@ -23,12 +23,14 @@ export class SignupComponent implements OnInit {
   personalDetails!: FormGroup;
   profileImgGroup!: FormGroup;
   profileImgFile!: File;
+  isLoading!: boolean;
 
   constructor(private dataService: DataService, private router: Router, private route: ActivatedRoute, private usernameValidatorService: UsernameExistsService, private snackbar: MatSnackBar) {}
 
   ngOnInit() {
+    this.isLoading = true;
     this.credentials = new FormGroup({
-      username: new FormControl('', [Validators.required, NoSpaceValidator], [this.usernameValidatorService.validate('')]),    //error due to usernameValidator
+      username: new FormControl('', [Validators.required, NoSpaceValidator], [this.usernameValidatorService.validate('')]),
       password: new FormControl('', [Validators.required])
     });
     this.personalDetails = new FormGroup({
@@ -40,13 +42,14 @@ export class SignupComponent implements OnInit {
     this.profileImgGroup = new FormGroup({
       profileImg: new FormControl(undefined, [Validators.required])
     });
+    this.isLoading = false;
   }
 
   onImgChange() {
     // this.profileImgFile = event.target.files[0];
-    console.log(this.profileImgGroup.value.profileImg);
-    this.profileImgFile = this.profileImgGroup.value.profileImg._files[0];
-    console.log(this.profileImgFile);
+    // console.log(this.profileImgGroup.value.profileImg);
+    this.profileImgFile = this.profileImgGroup.value.profileImg?._files[0];
+    // console.log(this.profileImgFile);
     // console.log('file content', await this.profileImgFile.text());
     
   }
@@ -67,10 +70,13 @@ export class SignupComponent implements OnInit {
       heightInCm: this.personalDetails.value.height,
       gender: this.personalDetails.value.gender,
       dob: this.personalDetails.value.dob,
+      profile_img: this.profileImgFile
     }
-    this.dataService.registerUser(newProfile, this.profileImgFile).subscribe((data:any) => {
+    this.isLoading = true;
+    this.dataService.registerUser(newProfile).subscribe((data:any) => {
       console.log(data);
-      // this.router.navigate(['profile/',this.credentials.value.username]);
+      this.isLoading = false;
+      this.router.navigate(['profile/',this.credentials.value.username]);
     })
 
     // console.log(this.img.nativeElement);

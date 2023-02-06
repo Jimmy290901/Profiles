@@ -1,4 +1,5 @@
-<mat-card class="flex-center">
+<app-spinner *ngIf="isLoading"></app-spinner>
+<mat-card class="flex-center" *ngIf="!isLoading">
     <mat-card-header>
         <mat-card-title>Edit Profile</mat-card-title>
     </mat-card-header>
@@ -65,7 +66,11 @@
                 <mat-expansion-panel-header>
                     <mat-panel-title>Profile Image</mat-panel-title>
                 </mat-expansion-panel-header>
-                
+                <mat-form-field appearance="outline">
+                    <mat-label>Profile Photo</mat-label>
+                    <ngx-mat-file-input formControlName="profile_img" (change)="onImgChange()" accept="image/*" name="profile_img"></ngx-mat-file-input>
+                    <mat-icon matSuffix>folder</mat-icon>
+                </mat-form-field>
             </mat-expansion-panel>
 
         </mat-card-content>

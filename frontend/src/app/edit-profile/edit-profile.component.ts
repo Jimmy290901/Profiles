@@ -20,41 +20,69 @@ export class EditProfileComponent implements OnInit {
   profileUpdateForm!: FormGroup;
   profileData!: Profile; 
   username!: string;
+  isLoading!: boolean;
+  profileImgFile!: File;
 
   constructor(private dataService: DataService,private router: Router, private route: ActivatedRoute, private usernameValidatorService: UsernameExistsService, private snackbar: MatSnackBar) {}
 
   ngOnInit(): void {
+    this.isLoading = true;
       this.route.paramMap.subscribe(async (params: ParamMap) => {
         if (params.has('username')) {
           this.dataService.getProfile(params.get('username')!).subscribe((data: Profile) => {
             console.log(data);
             if (data === null) {
+              this.isLoading = false;
               this.router.navigateByUrl('/not-found');
             } else {
               this.profileData = data;
               this.username = data.username;
               this.profileUpdateForm = new FormGroup({
-                username: new FormControl(this.profileData.username, [Validators.required, NoSpaceValidator, this.usernameValidatorService.validate(this.username)]),
+                username: new FormControl(this.profileData.username, [Validators.required, NoSpaceValidator], [this.usernameValidatorService.validate(this.profileData.username)]),
                 password: new FormControl(this.profileData.password, [Validators.required]),
                 name: new FormControl(this.profileData.name, [Validators.required]),
                 heightInCm: new FormControl(+this.profileData.heightInCm, [Validators.required, Validators.min(0)]),
                 gender: new FormControl(this.profileData.gender, [Validators.required]),
                 dob: new FormControl(this.profileData.dob, [Validators.required]),
-                // profile_img_url: new FormControl(null, [Validators.required])
+                profile_img: new FormControl(undefined)
               });
             }
+            this.isLoading = false;
           });
         }
       });
   }
 
-  onSubmit() {
+  onImgChange() {
+    // this.profileImgFile = event.target.files[0];
+    // console.log(this.profileImgGroup.value.profileImg);
+    this.profileImgFile = this.profileUpdateForm.value.profile_img?._files[0];
+    console.log(this.profileImgFile);
+    // console.log('file content', await this.profileImgFile.text());
+    
+  }
+
+  async onSubmit() {
     if (!this.profileUpdateForm.valid) {
+      console.log(this.profileUpdateForm);
       this.snackbar.open('Form incomplete. Try Again!', 'Close');
       return;
     }
-    this.dataService.updateData(this.profileUpdateForm.value, this.username);
-    this.router.navigate(['profile/',this.profileUpdateForm.value.username]);
+    this.profileData = {
+      username: this.profileUpdateForm.value.username,
+      password: this.profileUpdateForm.value.password,
+      name: this.profileUpdateForm.value.name,
+      heightInCm: this.profileUpdateForm.value.heightInCm,
+      gender: this.profileUpdateForm.value.gender,
+      dob: this.profileUpdateForm.value.dob,
+      profile_img: this.profileImgFile === undefined ? this.profileData.profile_img : this.profileImgFile
+    }
+    this.isLoading = true;
+    this.dataService.updateData(this.profileData, this.username).subscribe((data) => {
+      console.log(data);
+      this.isLoading = false;
+      this.router.navigate(['profile/',this.profileUpdateForm.value.username]);
+    })
   }
 
   onDiscard() {

@@ -96,6 +96,6 @@ app.get('/profile/:username', async (req, res) => {
     }
 });
 
-app.patch('/profile/:username/edit', (req, res) => {
-
+app.patch('/profile/:username/edit', upload.single('profile_img'), (req, res) => {
+    console.log(req.body);
 });

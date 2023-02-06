@@ -69,16 +69,20 @@ export class DataService {
     return true;
   }
 
-  registerUser(newProfile: Profile, img: File) {
+  createFromData(newProfile: Profile): FormData {
     const formData = new FormData();
-    formData.append('profile_img', img, img.name);
+    formData.append('profile_img', newProfile.profile_img, newProfile.profile_img.name);
     formData.append('username', newProfile.username);
     formData.append('password', newProfile.password);
     formData.append('name', newProfile.name);
     formData.append('dob', newProfile.dob.toDateString());
     formData.append('gender', newProfile.gender);
     formData.append('heightInCm', newProfile.heightInCm.toString());
+    return formData;
+  }
 
+  registerUser(newProfile: Profile) {
+    const formData = this.createFromData(newProfile);
     return this.http.post(this.api_url+'/signup', formData);
     
     
@@ -101,9 +105,11 @@ export class DataService {
   }
 
   updateData(updatedProfile: Profile, username: string) {
-    const idx = this.usersProfile.findIndex(profile => profile.username === username);
-    this.usersProfile[idx] = updatedProfile;
-    console.log(this.usersProfile);
+    // const idx = this.usersProfile.findIndex(profile => profile.username === username);
+    // this.usersProfile[idx] = updatedProfile;
+    // console.log(this.usersProfile);
+    const formData = this.createFromData(updatedProfile);
+    return this.http.patch(this.api_url+'/profile/'+username+'/edit', formData);
   }
 
 }

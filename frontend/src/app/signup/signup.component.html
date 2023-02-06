@@ -1,4 +1,5 @@
-<mat-card class="flex-center">
+<app-spinner *ngIf="isLoading"></app-spinner>
+<mat-card class="flex-center" *ngIf="!isLoading">
     <mat-card-header>
         <mat-card-title>Sign Up</mat-card-title>
     </mat-card-header>
