@@ -53,7 +53,6 @@ app.get('/check-username', async (req, res) => {
     const exception = req.query.exception;
     try {
         const profile = await profiles.findOne({username: {$eq: username, $ne: exception}});
-        console.log(profile);
         if (profile) {
             res.send({'username_exists': true});
         } else {
@@ -73,6 +72,7 @@ app.post('/signup', upload.single('profile_img'), async (req, res) => {
     try {
         const profile = {
             ...req.body,
+            dob: new Date(req.body.dob) ,
             profile_img: {
                 data: fs.readFileSync('uploads/images/' + req.file.filename),
                 contentType: 'image/png'
@@ -89,13 +89,31 @@ app.get('/profile/:username', async (req, res) => {
     const req_username = req.params["username"];
     try {
         const user_profile = await profiles.findOne({username: req_username});
-        res.send(user_profile);
+        res.send(user_profile);         
     } catch(err) {
         console.error(err);
         res.status(500).send(err);
     }
 });
 
-app.patch('/profile/:username/edit', upload.single('profile_img'), (req, res) => {
-    console.log(req.body);
+app.patch('/profile/:username/edit', upload.single('profile_img'), async (req, res) => {
+    const req_username = req.params['username'];
+    try {
+        let user_profile = await profiles.findOne({username: req_username});
+        user_profile = {
+            ...req.body,
+            profile_img: user_profile.profile_img
+        }
+        if (req.file !== undefined) {
+            user_profile.profile_img = {
+                data: fs.readFileSync('uploads/images/' + req.file.filename),
+                contentType: 'image/png'
+            }
+        }
+        await profiles.updateOne({username: req_username}, user_profile);
+        res.send({success: true, message: "Update successful"});
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
+    }
 });

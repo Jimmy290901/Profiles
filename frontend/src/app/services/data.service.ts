@@ -71,7 +71,9 @@ export class DataService {
 
   createFromData(newProfile: Profile): FormData {
     const formData = new FormData();
-    formData.append('profile_img', newProfile.profile_img, newProfile.profile_img.name);
+    if (newProfile.hasOwnProperty('profile_img')) {
+      formData.append('profile_img', newProfile.profile_img, newProfile.profile_img.name);
+    }
     formData.append('username', newProfile.username);
     formData.append('password', newProfile.password);
     formData.append('name', newProfile.name);
