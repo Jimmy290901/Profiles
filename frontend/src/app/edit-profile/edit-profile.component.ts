@@ -30,12 +30,14 @@ export class EditProfileComponent implements OnInit {
       this.route.paramMap.subscribe(async (params: ParamMap) => {
         if (params.has('username')) {
           this.dataService.getProfile(params.get('username')!).subscribe((data: Profile) => {
-            console.log(data);
             if (data === null) {
               this.isLoading = false;
               this.router.navigateByUrl('/not-found');
             } else {
-              this.profileData = data;
+              this.profileData = {
+                ...data,
+                dob: new Date(data.dob)
+              }
               this.username = data.username;
               this.profileUpdateForm = new FormGroup({
                 username: new FormControl(this.profileData.username, [Validators.required, NoSpaceValidator], [this.usernameValidatorService.validate(this.profileData.username)]),
@@ -47,6 +49,7 @@ export class EditProfileComponent implements OnInit {
                 profile_img: new FormControl(undefined)
               });
             }
+            console.log(this.profileData);
             this.isLoading = false;
           });
         }
@@ -75,7 +78,9 @@ export class EditProfileComponent implements OnInit {
       heightInCm: this.profileUpdateForm.value.heightInCm,
       gender: this.profileUpdateForm.value.gender,
       dob: this.profileUpdateForm.value.dob,
-      profile_img: this.profileImgFile === undefined ? this.profileData.profile_img : this.profileImgFile
+    }
+    if (this.profileImgFile !== undefined) {
+      this.profileData.profile_img = this.profileImgFile;
     }
     this.isLoading = true;
     this.dataService.updateData(this.profileData, this.username).subscribe((data) => {

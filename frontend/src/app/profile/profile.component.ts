@@ -27,14 +27,17 @@ export class ProfileComponent implements OnInit {
         if (params.has('username')) {
           this.dataService.getProfile(params.get('username')!).subscribe((data: Profile) => {
             // console.log(typeof data.profile_img);
-            console.log(data);
             if (data === null) {
               this.isLoading = false;
               this.router.navigateByUrl('/not-found');
             } else {
-              this.profileData = data;
+              this.profileData = {
+                ...data,
+                dob: new Date(data.dob)
+              }
             }
             this.imgSrc = "data:" + this.profileData.profile_img.contentType + ";base64,"+ Buffer.from(this.profileData.profile_img.data.data).toString('base64');
+            console.log(this.profileData);
             this.isLoading = false;
           });
         }

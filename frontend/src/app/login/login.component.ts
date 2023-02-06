@@ -14,15 +14,26 @@ import { DataService } from '../services/data.service';
 })
 export class LoginComponent {
   hide: boolean = true;
+  isLoading!: boolean;
+  usernameVal: string = '';
+  passwordVal: string = '';
 
   constructor(private dataService: DataService, private router: Router, private route: ActivatedRoute, private snackbar: MatSnackBar) {}
 
   onSubmit(f: NgForm) {
-    if (this.dataService.verifyCredentials(f.value.username, f.value.password)) {
-      this.router.navigate(['profile/', f.value.username]);
-    } else {
-      this.snackbar.open('Invalid Credentials. Try Again!', 'Close')
+    if (f.invalid) {
+      this.snackbar.open('Invalid Credentials. Try Again!', 'Close');
+      return;
     }
+    this.isLoading = true;
+    this.dataService.verifyCredentials(this.usernameVal, this.passwordVal).subscribe((valid: boolean) => {
+      this.isLoading = false;
+      if (valid) {
+        this.router.navigate(['profile/', this.usernameVal]);
+      } else {
+        this.snackbar.open('Invalid Credentials. Try Again!', 'Close');
+      }
+    });
   }
 
 }

@@ -1,4 +1,5 @@
-<mat-card class="flex-center">
+<app-spinner *ngIf="isLoading"></app-spinner>
+<mat-card class="flex-center" *ngIf="!isLoading">
     <mat-card-header>
         <mat-card-title>Login</mat-card-title>
     </mat-card-header>
@@ -6,16 +7,16 @@
         <mat-card-content class="flex-column form-fields">
             <mat-form-field appearance="outline">
                 <mat-label>Username</mat-label>
-                <input matInput type="text" required ngModel name="username" #username="ngModel" appNoSpace>
-                <mat-error *ngIf="!username.valid && username.touched">
+                <input matInput type="text" required ngModel name="username" #username="ngModel" appNoSpace [(ngModel)]="usernameVal">
+                <mat-error *ngIf="!username.valid">
                     <span *ngIf="username.hasError('hasSpace'); else empty">Username cannot contain spaces</span>
                     <ng-template #empty>Username cannot be empty</ng-template>
                 </mat-error>
             </mat-form-field>
             <mat-form-field appearance="outline">
                 <mat-label>Password</mat-label>
-                <input matInput [type]="hide ? 'password' : 'text'" required ngModel name="password" #password="ngModel">
-                <mat-error *ngIf="!password.valid && password.touched">Password cannot be empty</mat-error>
+                <input matInput [type]="hide ? 'password' : 'text'" required ngModel name="password" #password="ngModel" [(ngModel)]="passwordVal">
+                <mat-error *ngIf="!password.valid">Password cannot be empty</mat-error>
                 <button mat-icon-button matSuffix (click)="hide = !hide" type="button">
                     <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                 </button>
