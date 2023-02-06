@@ -64,8 +64,19 @@ app.get('/check-username', async (req, res) => {
     }
 });
 
-app.post('/login', (req, res) => {
-
+app.get('/login', async (req, res) => {
+    const [username, password] = Buffer.from(req.header('Authorization').split(' ')[1], 'base64').toString('ascii').split(' ');
+    try {
+        const data = await profiles.findOne({username: username, password: password});
+        if (data) {
+            res.send(true);
+        } else {
+            res.send(false);
+        }
+    } catch(err) {
+        console.log(err);
+        res.status(500).send(err);
+    }
 });
 
 app.post('/signup', upload.single('profile_img'), async (req, res) => {

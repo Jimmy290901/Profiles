@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ValidationErrors } from '@angular/forms';
-import { Observable, Subject } from 'rxjs';
-
+import { Observable } from 'rxjs';
+import { Buffer } from 'buffer';
 import { Gender, Profile } from '../model/profile';
 
 // import { ProfileServiceClient } from '../proto/ProfilesServiceClientPb';
@@ -61,12 +61,14 @@ export class DataService {
     });
   }
 
-  verifyCredentials(username: string, password: string): boolean {
-    // const userProfile = this.getProfile(username);
-    // if (userProfile === undefined || userProfile.password !== password) {
-    //   return false;
-    // }
-    return true;
+  verifyCredentials(username: string, password: string): Observable<boolean> {
+    return this.http.get<boolean>(this.api_url+'/login', {
+      headers: new HttpHeaders({
+        'Authorization': 'Basic ' + Buffer.from(`${username} ${password}`).toString('base64')
+      }),
+      observe: 'body',
+      responseType: 'json',
+    })
   }
 
   createFromData(newProfile: Profile): FormData {
