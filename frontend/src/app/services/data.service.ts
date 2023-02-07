@@ -81,6 +81,10 @@ export class DataService {
     return localStorage.getItem(this.TOKEN_KEY);
   }
 
+  updateToken(newToken: string) {
+    localStorage.setItem(this.TOKEN_KEY, newToken);
+  }
+
   createFromData(newProfile: Profile): FormData {
     const formData = new FormData();
     if (newProfile.hasOwnProperty('profile_img')) {

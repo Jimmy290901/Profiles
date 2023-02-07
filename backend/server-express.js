@@ -51,6 +51,14 @@ const storage = multer.diskStorage({
 });
 const upload = multer({storage: storage});
 
+//helper methods
+const generateJWTtoken = (username) => {
+    return jwt.sign({
+        date: new Date(),
+        username: username
+    }, JWT_SECRET_KEY);
+}
+
 //Setting up express routes and corresponding callbacks
 app.get('/check-username', async (req, res) => {
     const username = req.query.username;
@@ -73,10 +81,7 @@ app.post('/login', async (req, res) => {
     try {
         const data = await profiles.findOne({username: username, password: password});
         if (data) {
-            const jwt_token = jwt.sign({
-                date: new Date(),
-                username: username
-            }, JWT_SECRET_KEY);
+            const jwt_token = generateJWTtoken(username);
             res.send({
                 success: true,
                 token: jwt_token
@@ -103,10 +108,7 @@ app.post('/signup', upload.single('profile_img'), async (req, res) => {
             }
         }
         await profiles.create(profile);
-        const jwt_token = jwt.sign({
-            date: new Date(),
-            username: req.body.username
-        }, JWT_SECRET_KEY);
+        const jwt_token = generateJWTtoken(req.body.username);
         res.send({
             profile: data,
             token: jwt_token
@@ -148,7 +150,10 @@ app.patch('/profile/:username/edit', validateToken, upload.single('profile_img')
             }
         }
         await profiles.updateOne({username: req_username}, user_profile);
-        res.send({success: true, message: "Update successful"});
+        if (req_username !== req.body.username) {
+            new_jwt_token = generateJWTtoken(req.body.username);
+        }
+        res.send({success: true, message: "Update successful", new_jwt_token: new_jwt_token});
     } catch (err) {
         console.log(err);
         res.status(500).send(err);

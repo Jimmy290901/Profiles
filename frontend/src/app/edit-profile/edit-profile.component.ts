@@ -84,8 +84,11 @@ export class EditProfileComponent implements OnInit {
       this.profileData.profile_img = this.profileImgFile;
     }
     this.isLoading = true;
-    this.dataService.updateData(this.profileData, this.username).subscribe((data) => {
+    this.dataService.updateData(this.profileData, this.username).subscribe((data: any) => {
       console.log(data);
+      if (data.hasOwnProperty('new_jwt_token')) {
+        this.dataService.updateToken(data.new_jwt_token);
+      }
       this.isLoading = false;
       this.router.navigate(['profile/',this.profileUpdateForm.value.username]);
     })
