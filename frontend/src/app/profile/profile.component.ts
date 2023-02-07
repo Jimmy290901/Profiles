@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { Profile } from '../model/profile';
+import { ErrorInterface, Profile } from '../model/profile';
 import { DataService } from '../services/data.service';
 
 var Buffer = require('buffer/').Buffer;
@@ -21,27 +21,27 @@ export class ProfileComponent implements OnInit {
 
   constructor(private dataService: DataService,private router: Router, private route: ActivatedRoute) {}
 
-    ngOnInit(): void {
-      this.isLoading = true;
-      this.route.paramMap.subscribe((params: ParamMap) => {
-        if (params.has('username')) {
-          this.dataService.getProfile(params.get('username')!).subscribe((data: Profile) => {
-            // console.log(typeof data.profile_img);
-            if (data === null) {
-              this.isLoading = false;
-              this.router.navigateByUrl('/not-found');
-            } else {
-              this.profileData = {
-                ...data,
-                dob: new Date(data.dob)
-              }
+  ngOnInit(): void {
+    this.isLoading = true;
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      if (params.has('username')) {
+        this.dataService.getProfile(params.get('username')!).subscribe({
+          next: (data: Profile) => {
+            this.profileData = {
+              ...data,
+              dob: new Date(data.dob)
             }
             this.imgSrc = "data:" + this.profileData.profile_img.contentType + ";base64,"+ Buffer.from(this.profileData.profile_img.data.data).toString('base64');
             console.log(this.profileData);
             this.isLoading = false;
-          });
-        }
-      });
+          }, 
+          error: (err: ErrorInterface) => {
+            console.log(err);
+            this.router.navigate(['/error'], {queryParams: err});
+          }
+        });
+      }
+    });
   }
 
   handleClickUpdateProfile() {

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { ValidationErrors } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { Buffer } from 'buffer';
-import { Gender, Profile } from '../model/profile';
+import { Gender, Profile, LoginResponse, SignupResponse } from '../model/profile';
 
 // import { ProfileServiceClient } from '../proto/ProfilesServiceClientPb';
 // import { UsernameRequest } from '../proto/profiles_pb';
@@ -22,6 +22,8 @@ export class DataService {
     dob: new Date(),
     // profile_img: 'assets/images/sample.png'
   }];
+
+  private TOKEN_KEY = 'token';
 
   private api_url = 'http://localhost:3000';
   // private baseApiUrl = "https://file.io";
@@ -61,14 +63,22 @@ export class DataService {
     });
   }
 
-  verifyCredentials(username: string, password: string): Observable<boolean> {
-    return this.http.get<boolean>(this.api_url+'/login', {
-      headers: new HttpHeaders({
-        'Authorization': 'Basic ' + Buffer.from(`${username} ${password}`).toString('base64')
-      }),
+  verifyCredentials(username: string, password: string): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(this.api_url+'/login', {
+      'credentials': 'Basic ' + Buffer.from(`${username} ${password}`).toString('base64')
+    }, 
+    {
       observe: 'body',
       responseType: 'json',
-    })
+    });
+  }
+
+  storeToken(token: string) {
+    localStorage.setItem(this.TOKEN_KEY, token);
+  }
+
+  fetchToken() {
+    return localStorage.getItem(this.TOKEN_KEY);
   }
 
   createFromData(newProfile: Profile): FormData {
@@ -85,16 +95,9 @@ export class DataService {
     return formData;
   }
 
-  registerUser(newProfile: Profile) {
+  registerUser(newProfile: Profile): Observable<SignupResponse> {
     const formData = this.createFromData(newProfile);
-    return this.http.post(this.api_url+'/signup', formData);
-    
-    
-    // if (this.noProfiles()) {
-    //   this.usersProfile = [newProfile];
-    // } else {
-    //   this.usersProfile.push(newProfile);
-    // }
+    return this.http.post<SignupResponse>(this.api_url+'/signup', formData);
   }
 
   noProfiles() {

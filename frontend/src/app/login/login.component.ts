@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoginResponse } from '../model/profile';
 import { DataService } from '../services/data.service';
 
 @Component({
@@ -26,9 +27,14 @@ export class LoginComponent {
       return;
     }
     this.isLoading = true;
-    this.dataService.verifyCredentials(this.usernameVal, this.passwordVal).subscribe((valid: boolean) => {
+    this.dataService.verifyCredentials(this.usernameVal, this.passwordVal).subscribe((data: LoginResponse) => {
       this.isLoading = false;
-      if (valid) {
+      if (data.success) {
+        if (data.token) {
+          this.dataService.storeToken(data.token);
+          console.log(this.dataService.fetchToken());
+        }
+        this.snackbar.dismiss();
         this.router.navigate(['profile/', this.usernameVal]);
       } else {
         this.snackbar.open('Invalid Credentials. Try Again!', 'Close');

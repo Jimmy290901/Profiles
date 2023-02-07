@@ -5,7 +5,7 @@ import { FormControl } from '@angular/forms';
 import { NoSpaceValidator } from '../validators/no-space.directive';
 import { UsernameExistsService } from '../validators/username-exists.service';
 import { DataService } from '../services/data.service';
-import { Profile } from '../model/profile';
+import { Profile, SignupResponse } from '../model/profile';
 import { firstValueFrom } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -73,15 +73,11 @@ export class SignupComponent implements OnInit {
       profile_img: this.profileImgFile
     }
     this.isLoading = true;
-    this.dataService.registerUser(newProfile).subscribe((data:any) => {
-      console.log(data);
+    this.dataService.registerUser(newProfile).subscribe((response:SignupResponse) => {
+      console.log(response.profile);
+      this.dataService.storeToken(response.token);
       this.isLoading = false;
       this.router.navigate(['profile/',this.credentials.value.username]);
     })
-
-    // console.log(this.img.nativeElement);
-    // console.log(URL.createObjectURL(this.img.nativeElement.files[0]));
-    // console.log(URL.createObjectURL(this.profileImgGroup.value.profileImg));
-
   }
 }

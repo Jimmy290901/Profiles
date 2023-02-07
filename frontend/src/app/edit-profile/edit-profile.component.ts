@@ -3,7 +3,7 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { NoSpaceValidator } from '../validators/no-space.directive';
 import { UsernameExistsService } from '../validators/username-exists.service';
-import { Profile } from '../model/profile';
+import { ErrorInterface, Profile } from '../model/profile';
 import { DataService } from '../services/data.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -29,11 +29,8 @@ export class EditProfileComponent implements OnInit {
     this.isLoading = true;
       this.route.paramMap.subscribe(async (params: ParamMap) => {
         if (params.has('username')) {
-          this.dataService.getProfile(params.get('username')!).subscribe((data: Profile) => {
-            if (data === null) {
-              this.isLoading = false;
-              this.router.navigateByUrl('/not-found');
-            } else {
+          this.dataService.getProfile(params.get('username')!).subscribe({
+            next: (data: Profile) => {
               this.profileData = {
                 ...data,
                 dob: new Date(data.dob)
@@ -48,9 +45,13 @@ export class EditProfileComponent implements OnInit {
                 dob: new FormControl(this.profileData.dob, [Validators.required]),
                 profile_img: new FormControl(undefined)
               });
+              console.log(this.profileData);
+              this.isLoading = false;
+            },
+            error: (err: ErrorInterface) => {
+              console.log(err);
+              this.router.navigate(['/error'], {queryParams: err});
             }
-            console.log(this.profileData);
-            this.isLoading = false;
           });
         }
       });
