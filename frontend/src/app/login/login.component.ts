@@ -32,7 +32,6 @@ export class LoginComponent {
       if (data.success) {
         if (data.token) {
           this.dataService.storeToken(data.token);
-          console.log(this.dataService.fetchToken());
         }
         this.snackbar.dismiss();
         this.router.navigate(['profile/', this.usernameVal]);

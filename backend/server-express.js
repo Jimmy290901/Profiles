@@ -9,7 +9,7 @@ const fs = require('fs');
 const jwt = require('jsonwebtoken');
 
 //Middlewares
-const validateToken = require('./middlewares/validate-token');
+const {validateToken, adminTokenValidate} = require('./middlewares/validate-token');
 
 const app = express();
 
@@ -110,11 +110,12 @@ app.post('/signup', upload.single('profile_img'), async (req, res) => {
         await profiles.create(profile);
         const jwt_token = generateJWTtoken(req.body.username);
         res.send({
-            profile: data,
+            profile: profile,
             token: jwt_token
         }); 
     } catch(err) {
-        res.send({error: err});
+        console.log(err);
+        res.status(500).send(err);
     }
 });
 
@@ -159,3 +160,13 @@ app.patch('/profile/:username/edit', validateToken, upload.single('profile_img')
         res.status(500).send(err);
     }
 });
+
+app.get('/profiles/all', adminTokenValidate, async (req, res) => {
+    try {
+        const allProfiles = await profiles.find({username: {$ne: 'admin'}}, 'username name heightInCm gender dob profile_img');
+        res.send(allProfiles);
+    } catch(err) {
+        console.error(err);
+        res.status(500).send(err);
+    }
+})

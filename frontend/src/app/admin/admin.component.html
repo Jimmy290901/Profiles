@@ -1,0 +1,27 @@
+<h2 *ngIf="isEmpty">No Users yet!</h2>
+<!-- <ng-template *ngIf="!isEmpty"> -->
+<div class="flex-row flex-wrap flex-center">
+    <mat-card class="flex-center mg-10" *ngFor="let profile of profiles">
+        <mat-card-header class="flex-column flex-center padding-top-0">
+            <img mat-card-md-img src={{getImgSrc(profile.profile_img)}} class="circular-img">
+            <h1><strong>{{profile.name}}</strong></h1>
+            <h3>@{{profile.username}}</h3>
+        </mat-card-header>
+        <mat-card-content>
+            <mat-grid-list cols="2" rowHeight="40px" gutterSize="2px">
+                <!-- <mat-grid-tile><strong>Username</strong></mat-grid-tile>
+                <mat-grid-tile>{{profileData.username}}</mat-grid-tile> -->
+                <mat-grid-tile><strong>Height</strong></mat-grid-tile>
+                <mat-grid-tile>{{profile.heightInCm}} cm </mat-grid-tile>
+                <mat-grid-tile><strong>Date of Birth</strong></mat-grid-tile>
+                <mat-grid-tile>{{profile.dob | date: 'MM/dd/yyyy'}}</mat-grid-tile>
+                <mat-grid-tile><strong>Gender</strong></mat-grid-tile>
+                <mat-grid-tile>{{profile.gender}}</mat-grid-tile>
+            </mat-grid-list>
+        </mat-card-content>
+        <!-- <mat-card-actions>
+            <button mat-flat-button color="primary" class="wide-button" (click)="handleClickUpdateProfile()">Update Profile</button>
+        </mat-card-actions> -->
+    </mat-card>
+</div>
+<!-- </ng-template> -->

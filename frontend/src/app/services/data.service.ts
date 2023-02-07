@@ -13,18 +13,7 @@ import { Gender, Profile, LoginResponse, SignupResponse } from '../model/profile
 })
 export class DataService {
 
-  private usersProfile: [Profile] = [{
-    username: 'admin',
-    password: 'admin',
-    name: 'Administrator',
-    heightInCm: 100,
-    gender: Gender.FEMALE,
-    dob: new Date(),
-    // profile_img: 'assets/images/sample.png'
-  }];
-
-  private TOKEN_KEY = 'token';
-
+  private TOKEN_KEY = 'token'
   private api_url = 'http://localhost:3000';
   // private baseApiUrl = "https://file.io";
 
@@ -44,15 +33,6 @@ export class DataService {
     //     console.log(response);
     //   }
     // });
-    // if (this.noProfiles()) {
-    //   return false;
-    // }
-    // for (let i = 0; i < this.usersProfile.length; i++) {
-    //   if (this.usersProfile[i].username !== exception && this.usersProfile[i].username === username) {
-    //     return true;
-    //   }
-    // }
-    // return false;
     return this.http.get(this.api_url+'/check-username', {
       observe: 'body',
       responseType: 'json',
@@ -104,10 +84,6 @@ export class DataService {
     return this.http.post<SignupResponse>(this.api_url+'/signup', formData);
   }
 
-  noProfiles() {
-    return this.usersProfile === undefined;
-  }
-
   getProfile(username: string) {
     return this.http.get<Profile>(this.api_url+'/profile/'+username, {
       observe: 'body',
@@ -116,11 +92,19 @@ export class DataService {
   }
 
   updateData(updatedProfile: Profile, username: string) {
-    // const idx = this.usersProfile.findIndex(profile => profile.username === username);
-    // this.usersProfile[idx] = updatedProfile;
-    // console.log(this.usersProfile);
     const formData = this.createFromData(updatedProfile);
     return this.http.patch(this.api_url+'/profile/'+username+'/edit', formData);
+  }
+
+  getAllProfiles() {
+    return this.http.get<[Profile]>(this.api_url+'/profiles/all', {
+      observe: 'body',
+      responseType: 'json',
+    });
+  }
+
+  decodeImgBase64(profile_img: any) {
+    return "data:" + profile_img.contentType + ";base64,"+ Buffer.from(profile_img.data.data).toString('base64');
   }
 
 }

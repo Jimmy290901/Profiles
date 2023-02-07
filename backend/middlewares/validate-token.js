@@ -29,4 +29,23 @@ const validateToken = (req, res, next) => {
     
 }
 
-module.exports = validateToken;
+const adminTokenValidate = (req, res, next) => {
+    const headerAuthorization = req.header('authorization');
+    if (headerAuthorization) {
+        const authToken = headerAuthorization.split(' ')[1];
+        const jwtClaims = jwt.verify(authToken, JWT_SECRET_KEY);
+        if (jwtClaims.username === 'admin') {
+            next();
+        } else {
+            res.status(403).send({
+                message: 'Unauthorized access'
+            });
+        }
+    } else {
+        res.status(401).send({
+            message: 'Unauthenticated user'
+        });
+    }
+}
+
+module.exports = {validateToken, adminTokenValidate};

@@ -31,7 +31,7 @@ export class ProfileComponent implements OnInit {
               ...data,
               dob: new Date(data.dob)
             }
-            this.imgSrc = "data:" + this.profileData.profile_img.contentType + ";base64,"+ Buffer.from(this.profileData.profile_img.data.data).toString('base64');
+            this.imgSrc = this.dataService.decodeImgBase64(this.profileData.profile_img);
             console.log(this.profileData);
             this.isLoading = false;
           }, 

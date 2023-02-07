@@ -23,6 +23,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 
 import { AppComponent } from './app.component';
+import { AdminComponent } from './admin/admin.component';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -33,9 +34,10 @@ import { httpInterceptorProviders } from './interceptors/http-interceptor';
 import { NoSpaceDirective } from './validators/no-space.directive';
 import { ErrorComponent } from './error-page/error-page.component';
 import { SpinnerComponent } from './spinner/spinner.component';
-import { ErrorInterface } from './model/profile';
+
 
 const routes: Routes = [
+  {path: 'admin', component: AdminComponent},
   {path: 'login', component: LoginComponent},
   {path: 'signup', component: SignupComponent},
   {path: 'profile/:username', component: ProfileComponent},
@@ -53,7 +55,8 @@ const routes: Routes = [
     EditProfileComponent,
     NoSpaceDirective,
     ErrorComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,
