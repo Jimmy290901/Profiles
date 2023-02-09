@@ -153,8 +153,10 @@ app.patch('/profile/:username/edit', validateToken, upload.single('profile_img')
         await profiles.updateOne({username: req_username}, user_profile);
         if (req_username !== req.body.username) {
             new_jwt_token = generateJWTtoken(req.body.username);
+            res.send({success: true, message: "Update successful", new_jwt_token: new_jwt_token});
+        } else {
+            res.send({success: true, message: "Update successful"});
         }
-        res.send({success: true, message: "Update successful", new_jwt_token: new_jwt_token});
     } catch (err) {
         console.log(err);
         res.status(500).send(err);
