@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { ValidationErrors } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { Buffer } from 'buffer';
-import { Gender, Profile } from '../model/profile';
+import { Gender, Profile, LoginResponse, SignupResponse } from '../model/profile';
 
 // import { ProfileServiceClient } from '../proto/ProfilesServiceClientPb';
 // import { UsernameRequest } from '../proto/profiles_pb';
@@ -13,16 +13,7 @@ import { Gender, Profile } from '../model/profile';
 })
 export class DataService {
 
-  private usersProfile: [Profile] = [{
-    username: 'admin',
-    password: 'admin',
-    name: 'Administrator',
-    heightInCm: 100,
-    gender: Gender.FEMALE,
-    dob: new Date(),
-    // profile_img: 'assets/images/sample.png'
-  }];
-
+  private TOKEN_KEY = 'token'
   private api_url = 'http://localhost:3000';
   // private baseApiUrl = "https://file.io";
 
@@ -42,15 +33,6 @@ export class DataService {
     //     console.log(response);
     //   }
     // });
-    // if (this.noProfiles()) {
-    //   return false;
-    // }
-    // for (let i = 0; i < this.usersProfile.length; i++) {
-    //   if (this.usersProfile[i].username !== exception && this.usersProfile[i].username === username) {
-    //     return true;
-    //   }
-    // }
-    // return false;
     return this.http.get(this.api_url+'/check-username', {
       observe: 'body',
       responseType: 'json',
@@ -61,14 +43,26 @@ export class DataService {
     });
   }
 
-  verifyCredentials(username: string, password: string): Observable<boolean> {
-    return this.http.get<boolean>(this.api_url+'/login', {
-      headers: new HttpHeaders({
-        'Authorization': 'Basic ' + Buffer.from(`${username} ${password}`).toString('base64')
-      }),
+  verifyCredentials(username: string, password: string): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(this.api_url+'/login', {
+      'credentials': 'Basic ' + Buffer.from(`${username} ${password}`).toString('base64')
+    }, 
+    {
       observe: 'body',
       responseType: 'json',
-    })
+    });
+  }
+
+  storeToken(token: string) {
+    localStorage.setItem(this.TOKEN_KEY, token);
+  }
+
+  fetchToken() {
+    return localStorage.getItem(this.TOKEN_KEY);
+  }
+
+  updateToken(newToken: string) {
+    localStorage.setItem(this.TOKEN_KEY, newToken);
   }
 
   createFromData(newProfile: Profile): FormData {
@@ -85,20 +79,9 @@ export class DataService {
     return formData;
   }
 
-  registerUser(newProfile: Profile) {
+  registerUser(newProfile: Profile): Observable<SignupResponse> {
     const formData = this.createFromData(newProfile);
-    return this.http.post(this.api_url+'/signup', formData);
-    
-    
-    // if (this.noProfiles()) {
-    //   this.usersProfile = [newProfile];
-    // } else {
-    //   this.usersProfile.push(newProfile);
-    // }
-  }
-
-  noProfiles() {
-    return this.usersProfile === undefined;
+    return this.http.post<SignupResponse>(this.api_url+'/signup', formData);
   }
 
   getProfile(username: string) {
@@ -109,11 +92,19 @@ export class DataService {
   }
 
   updateData(updatedProfile: Profile, username: string) {
-    // const idx = this.usersProfile.findIndex(profile => profile.username === username);
-    // this.usersProfile[idx] = updatedProfile;
-    // console.log(this.usersProfile);
     const formData = this.createFromData(updatedProfile);
     return this.http.patch(this.api_url+'/profile/'+username+'/edit', formData);
+  }
+
+  getAllProfiles() {
+    return this.http.get<[Profile]>(this.api_url+'/profiles/all', {
+      observe: 'body',
+      responseType: 'json',
+    });
+  }
+
+  decodeImgBase64(profile_img: any) {
+    return "data:" + profile_img.contentType + ";base64,"+ Buffer.from(profile_img.data.data).toString('base64');
   }
 
 }

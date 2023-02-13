@@ -4,12 +4,16 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .flex-row {
-    display: flex;
+    display: flex !important;
 }
 
 .flex-column {
     display: flex !important;
     flex-direction: column !important;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
 }
 
 .flex-center {
@@ -72,6 +76,10 @@ mat-card-actions {
     margin-bottom: 10px;
 }
 
+.mg-10 {
+    margin: 10px;
+}
+
 .padding-top-0 {
     padding-top: 0 !important;
 }
@@ -81,6 +89,13 @@ mat-card-actions {
     max-width: 400px;
     min-width: 320px;
     margin: 32px 0;
+}
+
+.circular-img {
+    height: 200px;
+    width: 200px;
+    padding: 16px;
+    border-radius: 50%;
 }
 
 form {

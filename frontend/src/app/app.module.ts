@@ -23,23 +23,27 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 
 import { AppComponent } from './app.component';
+import { AdminComponent } from './admin/admin.component';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { ProfileComponent } from './profile/profile.component';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
+import { httpInterceptorProviders } from './interceptors/http-interceptor';
 
 
 import { NoSpaceDirective } from './validators/no-space.directive';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { ErrorComponent } from './error-page/error-page.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 
+
 const routes: Routes = [
+  {path: 'admin', component: AdminComponent},
   {path: 'login', component: LoginComponent},
   {path: 'signup', component: SignupComponent},
   {path: 'profile/:username', component: ProfileComponent},
   {path: 'profile/:username/edit', component: EditProfileComponent},
-  {path: 'not-found', component: PageNotFoundComponent},
-  {path: '**', redirectTo: '/not-found'}
+  {path: 'error', component: ErrorComponent},
+  {path: '**', redirectTo: '/error'}
 ]
 
 @NgModule({
@@ -50,8 +54,9 @@ const routes: Routes = [
     ProfileComponent,
     EditProfileComponent,
     NoSpaceDirective,
-    PageNotFoundComponent,
-    SpinnerComponent
+    ErrorComponent,
+    SpinnerComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,
@@ -75,7 +80,9 @@ const routes: Routes = [
     MatSnackBarModule,
     MatProgressSpinnerModule,
   ],
-  providers: [],
+  providers: [
+    httpInterceptorProviders
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
